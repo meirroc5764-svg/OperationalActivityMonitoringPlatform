@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SqlScript": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

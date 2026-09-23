@@ -17,8 +17,9 @@ count = 0
 for data in all_data:
 
     try:
+        data = data
 
-        producer.produce(data)
+        producer.produce("first-Topic",data)
         count += 1
         print("send to kafka")
 

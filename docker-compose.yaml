@@ -7,7 +7,25 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: StationDb
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping","-h","127.0.0.1", "-u", "root", "-pexample"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   
+  scrept:
+    build:
+      context: ./SqlScript
+      dockerfile: Dockerfile
+    
+    depends_on:
+      Stations:
+        condition : service_healthy
+    
+    
+
   activity:
     image: apache/kafka:latest
     container_name: activity
@@ -27,4 +45,18 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
 
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
 
+  producer:
+    build:
+      context: ./FirstProducer
+      dockerfile: Dockerfile
+    
+    depends_on:
+      activity:
+        condition : service_healthy
