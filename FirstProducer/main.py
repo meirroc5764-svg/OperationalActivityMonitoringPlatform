@@ -19,7 +19,7 @@ for data in all_data:
     try:
         data = data
 
-        producer.produce("first-Topic",data)
+        producer.produce("activity-readings",data)
         count += 1
         print("send to kafka")
 
